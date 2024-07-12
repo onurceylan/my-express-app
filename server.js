@@ -1,6 +1,10 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 const port = 3000;
+
+// Statik dosyalara hizmet et
+app.use(express.static(path.join(__dirname, 'bundles')));
 
 // GET request endpoint
 app.get('/greet', (req, res) => {
@@ -8,10 +12,13 @@ app.get('/greet', (req, res) => {
     const lastName = req.query.lastName;
 
     if (!firstName || !lastName) {
-        return res.status(400).send('Both firstName and lastName parameters are required');
+        return res.status(400).json({ error: 'Both firstName and lastName parameters are required' });
     }
 
-    res.send(`Hello, ${firstName} ${lastName}!`);
+    res.json({
+        firstName: firstName,
+        lastName: lastName
+    });
 });
 
 app.listen(port, () => {
